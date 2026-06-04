@@ -21,8 +21,8 @@ export default function LoginPage() {
     }
 
     const payload = await response.json();
-    localStorage.setItem('token', payload.token);
-    localStorage.setItem('role', payload.user.role);
+    sessionStorage.setItem('token', payload.token);
+    sessionStorage.setItem('role', payload.user.role);
     setMessage('Login successful. You can now open dashboard.');
   };
 

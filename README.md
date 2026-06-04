@@ -25,6 +25,7 @@ Production-ready full-stack inventory management platform using **React/Next.js 
 
 ## Quick Start (Docker)
 ```bash
+export JWT_SECRET=your-strong-secret
 docker compose up --build
 ```
 

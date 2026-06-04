@@ -1,17 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function ThemeToggle() {
   const [dark, setDark] = useState(false);
 
+  useEffect(() => {
+    document.body.classList.toggle('dark', dark);
+  }, [dark]);
+
   return (
-    <button
-      onClick={() => {
-        document.body.classList.toggle('dark');
-        setDark((current) => !current);
-      }}
-    >
+    <button onClick={() => setDark((current) => !current)}>
       {dark ? 'Light Mode' : 'Dark Mode'}
     </button>
   );
