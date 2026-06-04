@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const rateLimit = require('express-rate-limit');
 const { authenticate } = require('./middlewares/auth');
 const errorHandler = require('./middlewares/errorHandler');
 const authRoutes = require('./routes/auth.routes');
@@ -14,17 +15,30 @@ const dashboardRoutes = require('./routes/dashboard.routes');
 const activityRoutes = require('./routes/activity.routes');
 
 const app = express();
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 300,
+  standardHeaders: true,
+  legacyHeaders: false
+});
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false
+});
 
 app.use(helmet());
 app.use(cors());
 app.use(morgan('combined'));
 app.use(express.json());
+app.use('/api', apiLimiter);
 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/users', authenticate, userRoutes);
 app.use('/api/products', authenticate, productRoutes);
 app.use('/api/categories', authenticate, categoryRoutes);
