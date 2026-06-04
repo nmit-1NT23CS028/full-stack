@@ -1,0 +1,58 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: smart_inventory_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: smart_inventory
+      MYSQL_USER: inventory
+      MYSQL_PASSWORD: inventory
+    ports:
+      - '3306:3306'
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./backend/db/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      - ./backend/db/seed.sql:/docker-entrypoint-initdb.d/02_seed.sql:ro
+
+  redis:
+    image: redis:7-alpine
+    container_name: smart_inventory_redis
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+
+  backend:
+    build: ./backend
+    container_name: smart_inventory_backend
+    restart: unless-stopped
+    depends_on:
+      - mysql
+      - redis
+    ports:
+      - '5000:5000'
+    environment:
+      PORT: 5000
+      NODE_ENV: production
+      JWT_SECRET: ${JWT_SECRET:-change-me}
+      JWT_EXPIRES_IN: 1d
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_USER: inventory
+      MYSQL_PASSWORD: inventory
+      MYSQL_DATABASE: smart_inventory
+      REDIS_URL: redis://redis:6379
+
+  frontend:
+    build: ./frontend
+    container_name: smart_inventory_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - '3000:3000'
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:5000/api
+
+volumes:
+  mysql_data:

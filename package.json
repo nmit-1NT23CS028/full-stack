@@ -1,0 +1,11 @@
+{
+  "name": "smart-inventory-monorepo",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "backend:install": "npm --prefix backend install",
+    "frontend:install": "npm --prefix frontend install",
+    "backend:start": "npm --prefix backend run start",
+    "frontend:dev": "npm --prefix frontend run dev"
+  }
+}
