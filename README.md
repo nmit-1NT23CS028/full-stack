@@ -3,7 +3,7 @@
 Production-ready full-stack inventory management platform using **React/Next.js + Node/Express + MySQL + Redis + Docker + JWT + RBAC**.
 
 ## Features
-- JWT Authentication with bcrypt password hashing
+- JWT Authentication with bcrypt password hashing (httpOnly auth cookie)
 - Role-based access control (`admin`, `manager`, `staff`)
 - Inventory overview and low-stock alerts
 - Product/category/SKU/barcode management

@@ -31,11 +31,23 @@ router.post(
         expiresIn: env.jwtExpiresIn
       });
 
-      return res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role } });
+      res.cookie('token', token, {
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: env.nodeEnv === 'production',
+        maxAge: 24 * 60 * 60 * 1000
+      });
+
+      return res.json({ user: { id: user.id, name: user.name, email: user.email, role: user.role } });
     } catch (error) {
       return next(error);
     }
   }
 );
+
+router.post('/logout', (req, res) => {
+  res.clearCookie('token');
+  return res.json({ message: 'Logged out' });
+});
 
 module.exports = router;

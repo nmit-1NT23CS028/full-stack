@@ -10,15 +10,9 @@ export default function DashboardPage() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const token = sessionStorage.getItem('token');
-    if (!token) {
-      setError('Please login first.');
-      return;
-    }
-
-    apiGet('/dashboard/overview', token)
+    apiGet('/dashboard/overview')
       .then(setOverview)
-      .catch(() => setError('Unable to load dashboard'));
+      .catch(() => setError('Unable to load dashboard. Please login first.'));
   }, []);
 
   return (

@@ -12,6 +12,7 @@ export default function LoginPage() {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify(form)
     });
 
@@ -20,9 +21,7 @@ export default function LoginPage() {
       return;
     }
 
-    const payload = await response.json();
-    sessionStorage.setItem('token', payload.token);
-    sessionStorage.setItem('role', payload.user.role);
+    await response.json();
     setMessage('Login successful. You can now open dashboard.');
   };
 

@@ -1,8 +1,6 @@
-export async function apiGet(path, token) {
+export async function apiGet(path) {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}${path}`, {
-    headers: {
-      Authorization: 'Bearer ' + token
-    },
+    credentials: 'include',
     cache: 'no-store'
   });
 

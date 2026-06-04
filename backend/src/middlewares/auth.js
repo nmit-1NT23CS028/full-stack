@@ -2,9 +2,10 @@ const jwt = require('jsonwebtoken');
 const env = require('../config/env');
 
 const authenticate = (req, res, next) => {
-  const token = req.headers.authorization?.startsWith('Bearer ')
+  const authHeaderToken = req.headers.authorization?.startsWith('Bearer ')
     ? req.headers.authorization.split(' ')[1]
     : null;
+  const token = authHeaderToken || req.cookies?.token;
 
   if (!token) {
     return res.status(401).json({ message: 'Missing authentication token' });
